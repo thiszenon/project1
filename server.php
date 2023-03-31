@@ -1,30 +1,46 @@
-<?php 
-    // connection à la base de données
-    session_start();                     
-    $adressIP="localhost:3306";
+<?php
+    // Serveur et recuperation de données
+
+    //connexion à la base de données
+    $adress="localhost:3306";
+    $usernamedb="root";
+    $passworddb="";
     $dbName="testbd";
-    $username="root";
-    $password="";
-    $connect= mysqli_connect($adressIP,$username,$password,$dbName);
+    
+    $connect=mysqli_connect($adress,$usernamedb,$passworddb,$dbName);
     if(!$connect){
-        die("connection impossible".mysql_error());
+        die("connexion à la base de données impossible".mysql_error());
     }
-    
-
-    $nom=$_GET["firstName"];
-    $prenom=$_GET["lastName"];
-
-    $requette= "INSERT INTO utilisateurs(firstName,lastName) VALUES('$nom','$prenom')";
-    $test=mysqli_query($connect,$requette);
-    if(!$test){
-        die("requette impossible");
+    // recuperaation de données soumis par l'utilisateur
+    $firstName=$_POST['firstName'];
+    $lastName=$_POST['lastName'];
+    $email=$_POST['email'];
+    $password1=$_POST['password'];
+    $confPassword=$_POST['confPassword'];
+    if($password1 !=$confPassword){
+        die("les mot de passe ne conrespondent pas");
+        
+        //header("..//signup.php");
     }
-    header("localhost/project1/app.php");
+    $password=MD5($password1);
+    // insertion de données dans la BD
+    $requette= "INSERT INTO utilisateurs (firstName,lastName,emails,password) VALUES('$firstName','$lastName','$email','$password')";
+
+    $signup=mysqli_query($connect,$requette);
+    if(!$signup){
+        die("Inscription echouer");
+        //header("..//signup.php");
+    }
+    // connection à la page et ouverture d'une session utilisateurs
+    
+    
+
+
 
     
     
     
-
+    
     
 
 
